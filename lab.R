@@ -1,5 +1,5 @@
 #' ---
-#' title: "Data Science Methods, Lab for Week 99"
+#' title: "Data Science Methods, Lab for Week 2: R Basics"
 #' author: "Dan Hicks"
 #' email: hicks.daniel.j@gmail.com
 #' output:
