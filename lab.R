@@ -77,6 +77,7 @@ tt_data = tt_load('2019-02-12')
 #' For this system to work correctly, you need to do a few things in these lab assignments. 
 #' - When I tell you to assign something to a certain variable, you need to use that exact name.  Otherwise I won't know where to look for the output of your work. 
 #' - For the same reason, don't change filenames, etc. 
+#' - Anything that's not R code (eg, answers to questions) needs to be on lines starting with `#'`
 #' - Whenever you load additional packages (using `library()`, never `require()`), make sure they're also listed in the `DESCRIPTION` file. 
 #' - When you're finished with the lab, be sure to file a pull request against the original lab repo.  Travis will check your work and (need to confirm this) add a PR comment indicating whether there are any errors.  
 #' 
