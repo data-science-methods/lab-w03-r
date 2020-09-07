@@ -14,6 +14,9 @@
 
 library(ggplot2)
 library(dplyr)
+## On RStudio Cloud, you'll need to run the following two lines *the first time only*: 
+# install.packages('remotes')
+# remotes::install_github("thebioengineer/tidytuesdayR@dev")
 library(tidytuesdayR)
 
 ## If an error is raised here, see `one-time-setup.R`. 
@@ -44,7 +47,7 @@ tt_data = tt_load('2019-02-12')
 #     geom_line()
 # rd_plot
 
-#' 2. It's hard to read with all of the departments in a single panel.  Uncomment the following line, and add a `facet_wrap()` call to plot each agency in its own panel. 
+#' 2. It's hard to read with all of the agencies in a single panel.  Uncomment the following line, and add a `facet_wrap()` call to plot each agency in its own panel. 
 
 # rd_plot + facet_wrap()
 
