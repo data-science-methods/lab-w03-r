@@ -14,6 +14,7 @@
 
 library(ggplot2)
 library(dplyr)
+# remotes::install_github("thebioengineer/tidytuesdayR@dev")
 library(tidytuesdayR)
 
 ## If an error is raised here, see `one-time-setup.R`. 
@@ -29,28 +30,46 @@ tt_data = tt_load('2019-02-12')
 #' - Assign this element to a variable `dataf`.  Note that we want the element itself, not a list containing the element. 
 #' 
 
+dataf = tt_data$fed_r_d_spending
 
 #' # Problem 3 #
 #' 1. What is the class of `dataf`?  What dimensions does it have?  
 #' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
 #' 
 
+dataf
+
+class(dataf)
+dim(dataf)
+nrow(dataf)
+ncol(dataf)
+
 
 #' # Problem 4 #
 #' 1. Let's create a line graph of federal R&D spending over time, broken down by funding agency.  Uncomment the following lines (highlight them and then Command+Shift+C) and fill in the blanks: 
 
-# rd_plot = ggplot(data = ----, aes(x = ----, y = ----, 
-#                                  color = agency)) +
-#     geom_line()
-# rd_plot
+rd_plot = ggplot(data = dataf, aes(x = year, y = rd_budget,
+                                 color = department)) +
+    geom_line()
+rd_plot
 
 #' 2. It's hard to read with all of the departments in a single panel.  Uncomment the following line, and add a `facet_wrap()` call to plot each agency in its own panel. 
 
-# rd_plot + facet_wrap()
+rd_plot + facet_wrap(vars(department))
 
 #' 3. Copy and paste your code from above. The scale of DOD spending swamps most other agencies, including the National Science Foundation.  Let's put each facet on its own scale.  Consult `?facet_wrap`.  Read about the `scales` argument, and set it so that the scales are free along the y-axis. 
 
+rd_plot + facet_wrap(vars(department), scales = 'free')
+
 #' 4. Examine the examples in `?labs`.  Use this function to add more meaningful labels to the x- and y-axis, as well as a title for the whole plot.  Put your complete code below. 
+
+ggplot(data = dataf, aes(x = year, y = rd_budget,
+                         color = department)) +
+    geom_line() +
+    facet_wrap(vars(department), scales = 'free') +
+    labs(x = 'Year', 
+         y = 'Spending (constant $)', 
+         title = 'Federal R&D spending over time')
 
 #' 5. Has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
@@ -61,11 +80,19 @@ tt_data = tt_load('2019-02-12')
 #' 
 #' 1. Uncomment and run the following line of code.  
 
-# dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
+dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
 
 #' 2. Try and figure out what this code is doing. 
 #' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
 #' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
+
+ggplot(data = dataf, aes(x = year, y = rd_per_gdp,
+                         color = department)) +
+    geom_line() +
+    facet_wrap(vars(department), scales = 'free') +
+    labs(x = 'Year', 
+         y = 'Spending (constant $)', 
+         title = 'Federal R&D spending over time')
 
 #' 5. In terms of percentage of GDP, has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
