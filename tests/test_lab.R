@@ -1,4 +1,4 @@
-source("../lab.R", chdir = TRUE)
+source("../lab.R", echo = TRUE, chdir = TRUE)
 library(testthat)
 
 test_that('2. `dataf` should be identical to the third element of `tt_data`', {
