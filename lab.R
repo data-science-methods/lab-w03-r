@@ -16,7 +16,7 @@ library(ggplot2)
 library(dplyr)
 ## On RStudio Cloud, you'll need to run the following two lines *the first time only*: 
 # install.packages('remotes')
-remotes::install_github("thebioengineer/tidytuesdayR@dev")
+# remotes::install_github("thebioengineer/tidytuesdayR@dev")
 library(tidytuesdayR)
 
 ## If an error is raised here, see `one-time-setup.R`. 
