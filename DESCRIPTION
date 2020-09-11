@@ -1,5 +1,6 @@
 Imports:
     testthat,
     tidytuesdayR, 
-    ggplot2
+    ggplot2,
+    dplyr
     
