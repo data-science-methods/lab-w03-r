@@ -1,7 +1,7 @@
 #' ---
 #' title: "Data Science Methods, Lab for Week 2: R Basics"
-#' author: "Your Name"
-#' email: Your Email
+#' author: "Joshua Clingo"
+#' email: joshuaclingo@gmail.com
 #' output:
 #'   html_document:
 #'     toc: true
@@ -32,47 +32,75 @@ tt_data = tt_load('2019-02-12')
 #' - Assign this element to a variable `dataf`.  Note that we want the element itself, not a list containing the element. 
 #' 
 
+dataf = tt_data$fed_r_d_spending
 
 #' # Problem 3 #
-#' 1. What is the class of `dataf`?  What dimensions does it have?  
+#' 1. What is the class of `dataf`?  What dimensions does it have? 
+#' A tibble. 588 x 6 
 #' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
+#' dbl, dbl -- These are apparently already adjusted for inflation
 #' 
+
 
 
 #' # Problem 4 #
 #' 1. Let's create a line graph of federal R&D spending over time, broken down by funding agency.  Uncomment the following lines (highlight them and then Command+Shift+C) and fill in the blanks: 
 
-# rd_plot = ggplot(data = ----, aes(x = ----, y = ----, 
-#                                  color = agency)) +
-#     geom_line()
-# rd_plot
+rd_plot = ggplot(data = dataf, aes(x = year, y = rd_budget,
+                                  color = department)) +
+     geom_line()
+rd_plot
 
 #' 2. It's hard to read with all of the agencies in a single panel.  Uncomment the following line, and add a `facet_wrap()` call to plot each agency in its own panel. 
 
-# rd_plot + facet_wrap()
+rd_plot + facet_wrap(vars(department))
 
 #' 3. Copy and paste your code from above. The scale of DOD spending swamps most other agencies, including the National Science Foundation.  Let's put each facet on its own scale.  Consult `?facet_wrap`.  Read about the `scales` argument, and set it so that the scales are free along the y-axis. 
 
+rd_plot + facet_wrap(vars(department), scales = 'free_y')
+
 #' 4. Examine the examples in `?labs`.  Use this function to add more meaningful labels to the x- and y-axis, as well as a title for the whole plot.  Put your complete code below. 
+
+rd_plot + 
+    facet_wrap(vars(department), scales = 'free_y') + 
+    labs(y = "Spending (in dollars)", x = "Year", title = "US R&D spending over time" )
 
 #' 5. Has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
 
+#' Hella increased, overall
 
 #' # Problem 5 #
 #' These data have been adjusted for inflation, but GDP has also grown significantly over time.  Even if federal support for scientific researcher has grown in absolute dollars, it might be shrinking as a percentage of GDP. 
 #' 
 #' 1. Uncomment and run the following line of code.  
 
-# dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
+#' dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
 
 #' 2. Try and figure out what this code is doing. 
+
+#' Looks like we're getting the ratio of the R&D budget to the overall GDP, then turning that into a percentage and tacking it onto the OG frame
+
 #' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
+
+#' We're modifying our data source (which is a side-effect). We could assign (and should) the result to a new variable instead
+m_dataf = dataf;
+m_dataf = mutate(m_dataf, rd_per_gdp = rd_budget / gdp * 100)
+
 #' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
+#' Realistically, I wouldn't reassign rd_plot here, but you said modify...
+rd_plot = ggplot(data = m_dataf, aes(x = year, y = rd_per_gdp,color = department)) +
+    geom_line() +
+    labs(y = "Percentage", x = "Year", title = "US R&D spending per GDP over time" )
+rd_plot
+#' And here it is with the departments broken out
+rd_plot + facet_wrap(vars(department), scales = 'free_y') 
+
 
 #' 5. In terms of percentage of GDP, has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
 
+#' Hella decreased
 
 #' # Problem 6 #
 #' In the previous lab, you learned the fork-clone-push-PR workflow for these labs.  This allows us to use a system called Travis to automatically confirm that you've successfully completed each lab assignment.  (Hopefully we'll have time to learn more about Travis when we talk about reproducibility.) 
@@ -85,6 +113,6 @@ tt_data = tt_load('2019-02-12')
 #' - When you're finished with the lab, be sure to file a pull request against the original lab repo.  Travis will check your work and (need to confirm this) add a PR comment indicating whether there are any errors.  
 #' 
 #' This setup also allows you to get automated feedback on your working machine.  You'll need the `testthat` package installed.  Then, simply run the following line at any point: 
-# testthat::test_dir('tests', reporter = 'progress')
+testthat::test_dir('tests', reporter = 'progress')
 #' The output here will tell you where your code isn't getting the correct answer.  It will also indicate warnings where things can't be checked, like plots and written answers.  
 #' 
