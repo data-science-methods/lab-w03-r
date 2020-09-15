@@ -15,8 +15,8 @@
 library(ggplot2)
 library(dplyr)
 ## On RStudio Cloud, you'll need to run the following two lines *the first time only*: 
-# install.packages('remotes')
-# remotes::install_github("thebioengineer/tidytuesdayR@dev")
+#install.packages('remotes')
+#remotes::install_github("thebioengineer/tidytuesdayR@dev")
 library(tidytuesdayR)
 
 ## If an error is raised here, see `one-time-setup.R`. 
@@ -31,32 +31,42 @@ tt_data = tt_load('2019-02-12')
 #' `tt_data` is a list with three elements.  We want to work with the third element, named `fed_r_d_spending`.  
 #' - Assign this element to a variable `dataf`.  Note that we want the element itself, not a list containing the element. 
 #' 
-
+dataf <- tt_data$fed_r_d_spending
 
 #' # Problem 3 #
 #' 1. What is the class of `dataf`?  What dimensions does it have?  
+class(dataf)
+dim(dataf)
 #' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
-#' 
+#' Dollars. No, accoruding to the data description, rd_budget and gdp are inflation-adjusted (constant) dollars.
 
 
 #' # Problem 4 #
 #' 1. Let's create a line graph of federal R&D spending over time, broken down by funding agency.  Uncomment the following lines (highlight them and then Command+Shift+C) and fill in the blanks: 
 
-# rd_plot = ggplot(data = ----, aes(x = ----, y = ----, 
-#                                  color = agency)) +
-#     geom_line()
-# rd_plot
+ rd_plot = ggplot(data = dataf, aes(x = year, y = rd_budget, 
+                                  color = department)) +
+     geom_line()
+ rd_plot
 
 #' 2. It's hard to read with all of the agencies in a single panel.  Uncomment the following line, and add a `facet_wrap()` call to plot each agency in its own panel. 
 
-# rd_plot + facet_wrap()
+rd_plot + facet_wrap(vars(department))
 
 #' 3. Copy and paste your code from above. The scale of DOD spending swamps most other agencies, including the National Science Foundation.  Let's put each facet on its own scale.  Consult `?facet_wrap`.  Read about the `scales` argument, and set it so that the scales are free along the y-axis. 
+rd_plot + facet_wrap(vars(department), scales = "free_y")
 
 #' 4. Examine the examples in `?labs`.  Use this function to add more meaningful labels to the x- and y-axis, as well as a title for the whole plot.  Put your complete code below. 
+rd_plot + 
+    facet_wrap(vars(department), scales = "free_y")+
+    xlab("Year")+
+    ylab("Budget for Research-and-Ddevelopment agencies") +
+    ggtitle("Budget for Research-and-Development agencies by years")+
+    theme(plot.title = element_text(hjust = 0.5))
 
 #' 5. Has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
-#' 
+#'  Even thought the budget for some agencies (e.g. NSF, USDA, VA, etc) stayed flat, 
+#'  generally federal R&D spenaing increased over the 40 years.
 
 
 #' # Problem 5 #
@@ -64,14 +74,26 @@ tt_data = tt_load('2019-02-12')
 #' 
 #' 1. Uncomment and run the following line of code.  
 
-# dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
+dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
 
 #' 2. Try and figure out what this code is doing. 
+#' This code added a new variable called "rd_per_gdp", which means how much rd_budget accouts for gdp.
+
 #' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
+#' I have no idea. 
 #' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
+ ggplot(data = dataf, 
+                 aes(x = year, y = rd_per_gdp, 
+                     color = department)) +
+    geom_line() + 
+    facet_wrap(vars(department), scales = "free_y")+
+    xlab("Year")+
+    ylab("Research-and-Ddevelopment spending as a percentage of GDP") +
+    ggtitle("Budget for Research-and-Development agencies by years")+
+    theme(plot.title = element_text(hjust = 0.5))
 
 #' 5. In terms of percentage of GDP, has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
-#' 
+#' Decreased. 
 
 
 #' # Problem 6 #
@@ -85,6 +107,6 @@ tt_data = tt_load('2019-02-12')
 #' - When you're finished with the lab, be sure to file a pull request against the original lab repo.  Travis will check your work and (need to confirm this) add a PR comment indicating whether there are any errors.  
 #' 
 #' This setup also allows you to get automated feedback on your working machine.  You'll need the `testthat` package installed.  Then, simply run the following line at any point: 
-# testthat::test_dir('tests', reporter = 'progress')
+#testthat::test_dir('tests', reporter = 'progress')
 #' The output here will tell you where your code isn't getting the correct answer.  It will also indicate warnings where things can't be checked, like plots and written answers.  
 #' 
