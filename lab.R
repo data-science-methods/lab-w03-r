@@ -31,29 +31,40 @@ tt_data = tt_load('2019-02-12')
 #' `tt_data` is a list with three elements.  We want to work with the third element, named `fed_r_d_spending`.  
 #' - Assign this element to a variable `dataf`.  Note that we want the element itself, not a list containing the element. 
 #' 
-
+dataf <- tt_data[["fed_r_d_spending"]] 
 
 #' # Problem 3 #
 #' 1. What is the class of `dataf`?  What dimensions does it have?  
 #' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
 #' 
-
+class(dataf) # 1. dataf is a data frame (or a subclass of one)
+dim(dataf)  # 1. It has a dimension of 588 rows by 6 columns
+# 2. The unit for the variables 'rd_budget' and 'gdp' are in dollars. No we don't need to consider inflation when we work with
+# these variable because the data has been adjusted for inflation (see tidytuesday github) 
 
 #' # Problem 4 #
 #' 1. Let's create a line graph of federal R&D spending over time, broken down by funding agency.  Uncomment the following lines (highlight them and then Command+Shift+C) and fill in the blanks: 
 
-# rd_plot = ggplot(data = ----, aes(x = ----, y = ----, 
-#                                  color = agency)) +
-#     geom_line()
-# rd_plot
+rd_plot = ggplot(data = dataf, aes(x = year, y = rd_budget,
+                                 color = department)) +
+    geom_line()
+rd_plot
 
 #' 2. It's hard to read with all of the agencies in a single panel.  Uncomment the following line, and add a `facet_wrap()` call to plot each agency in its own panel. 
 
-# rd_plot + facet_wrap()
+rd_plot + facet_wrap(vars(department))
 
 #' 3. Copy and paste your code from above. The scale of DOD spending swamps most other agencies, including the National Science Foundation.  Let's put each facet on its own scale.  Consult `?facet_wrap`.  Read about the `scales` argument, and set it so that the scales are free along the y-axis. 
 
+rd_plot + facet_wrap(vars(department), scales ="free_y")
+
 #' 4. Examine the examples in `?labs`.  Use this function to add more meaningful labels to the x- and y-axis, as well as a title for the whole plot.  Put your complete code below. 
+
+rd_plot + facet_wrap(vars(department), scales ="free_y") + 
+  labs(title = "Federal R&D budget/spending over time") +
+  labs(subtitle = "Research and Development Expenditure in inflation adjusted Dollars from 1985-2019") +
+  xlab("Years") + ylab("Budget/Spending in Dollars")
+  
 
 #' 5. Has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
