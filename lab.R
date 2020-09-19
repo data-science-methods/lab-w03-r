@@ -18,7 +18,7 @@ library(dplyr)
 # install.packages('remotes')
 # remotes::install_github("thebioengineer/tidytuesdayR@dev")
 library(tidytuesdayR)
-
+library(testthat)
 ## If an error is raised here, see `one-time-setup.R`. 
 tt_data = tt_load('2019-02-12')
 
