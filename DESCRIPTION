@@ -2,4 +2,6 @@ Imports:
     testthat,
     ggplot2,
     dplyr,
-    remotes
+    remotes,
+    tidytuesdayR,
+
