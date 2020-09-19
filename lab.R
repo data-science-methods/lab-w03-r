@@ -87,14 +87,28 @@ rd_plot + facet_wrap(vars(department), scales ="free_y") +
 dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
 
 #' 2. Try and figure out what this code is doing. 
-#' This code replaces the exisiting column rd_per_gdp with a new column that take into account the gdp growth over time.  
-#' 
-#' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
-#' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
+#' This code creates and appends a new column (or variable), based on an existing one. This new variable: rd_per_gdp takes into account the gdp growth over time for the computation of rd_budget. Thus all the values in the rd_budget are reajusted by
+#' by being divided by '100 times gdp'. That newly created column is then added to the existing data frame to create a new one that here is reassigned to the old one.
 
+#' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
+#' In functional programming, a function only depends on their inputs and everything is immutable. In other words, given the same inputs will should always get the same ouput, and glabal objects used in those should be immutable. 
+#' Thus, this line violates the rules of functional programming because one of the parameter (dataf), has changed after going through the function mutate (as a global variable it should have stayed the same in true functional programming);
+#' and in addition, if now we were to rerun the same code with the same parameters, the results will be different because (dataf) is different. 
+#' To ovoid this violation we could assign the results of mutate to another variable called dataf_2 for instance (or choose more meaningful name for the variable)
+
+#' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
+rd_plot_2 = ggplot(data = dataf, aes(x = year, y = rd_per_gdp,
+                                   color = department)) +
+  geom_line()
+rd_plot_2
 #' 5. In terms of percentage of GDP, has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
-
+rd_plot_2 + facet_wrap(vars(department), scales ="free_y") + 
+  labs(title = "Federal R&D budget/spending over time") +
+  labs(subtitle = "Research and Development Expenditure in inflation adjusted Dollars from 1985-2019") +
+  xlab("Years") + ylab("Budget/Spending in Dollars") + 
+  geom_smooth(method = "lm") 
+#' In terms of percentage of GDP federal R&R spending has generally decreased. DHS is the only agency that saw an increase during these 40 years
 
 #' # Problem 6 #
 #' In the previous lab, you learned the fork-clone-push-PR workflow for these labs.  This allows us to use a system called Travis to automatically confirm that you've successfully completed each lab assignment.  (Hopefully we'll have time to learn more about Travis when we talk about reproducibility.) 
