@@ -37,11 +37,12 @@ dataf <- tt_data[["fed_r_d_spending"]]
 #' 1. What is the class of `dataf`?  What dimensions does it have?  
 #' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
 #' 
-class(dataf) # 1. dataf is a data frame (or a subclass of one)
-dim(dataf)  # 1. It has a dimension of 588 rows by 6 columns
-# 2. The unit for the variables 'rd_budget' and 'gdp' are in dollars. No we don't need to consider inflation when we work with
-# these variable because the data has been adjusted for inflation (see tidytuesday github) 
-
+class(dataf) 
+dim(dataf)
+#' 1. response: dataf is a data frame (or a subclass of one)
+#' 1.2 response: It has a dimension of 588 rows by 6 columns
+#' 2. response: The unit for the variables 'rd_budget' and 'gdp' are in dollars. No we don't need to consider inflation when we work with these variables because the data has been adjusted for inflation (see tidytuesday github) 
+ 
 #' # Problem 4 #
 #' 1. Let's create a line graph of federal R&D spending over time, broken down by funding agency.  Uncomment the following lines (highlight them and then Command+Shift+C) and fill in the blanks: 
 
@@ -69,15 +70,25 @@ rd_plot + facet_wrap(vars(department), scales ="free_y") +
 #' 5. Has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
 
+rd_plot + facet_wrap(vars(department), scales ="free_y") + 
+  labs(title = "Federal R&D budget/spending over time") +
+  labs(subtitle = "Research and Development Expenditure in inflation adjusted Dollars from 1985-2019") +
+  xlab("Years") + ylab("Budget/Spending in Dollars") + 
+  geom_smooth(method = "lm") # Regression line added
+
+#' From this graph it appears that over the last 40 years, aside from the EPA and the interior agency which shows clear downward trend, most of the agencies has an increase in spending 
+
 
 #' # Problem 5 #
 #' These data have been adjusted for inflation, but GDP has also grown significantly over time.  Even if federal support for scientific researcher has grown in absolute dollars, it might be shrinking as a percentage of GDP. 
 #' 
 #' 1. Uncomment and run the following line of code.  
 
-# dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
+dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
 
 #' 2. Try and figure out what this code is doing. 
+#' This code replaces the exisiting column rd_per_gdp with a new column that take into account the gdp growth over time.  
+#' 
 #' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
 #' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
 
