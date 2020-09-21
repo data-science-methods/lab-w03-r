@@ -36,16 +36,20 @@ dataf = tt_data$fed_r_d_spending
 
 #' # Problem 3 #
 #' 1. What is the class of `dataf`?  What dimensions does it have?  
-#' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
 #' 
-
-dataf
-
+#' `dataf` is a tbl_df (tibble); it has 588 rows and 6 columns
+#' 
 class(dataf)
-dim(dataf)
 nrow(dataf)
 ncol(dataf)
 
+
+#' 2. What are the units for the variables `rd_budget` and `gdp`?  Do we need to consider inflation when we work with these variables? 
+#' 
+#' Looking at the codebook, they're inflation-adjusted dollars
+#' 
+
+dataf
 
 #' # Problem 4 #
 #' 1. Let's create a line graph of federal R&D spending over time, broken down by funding agency.  Uncomment the following lines (highlight them and then Command+Shift+C) and fill in the blanks: 
@@ -75,6 +79,8 @@ ggplot(data = dataf, aes(x = year, y = rd_budget,
 
 #' 5. Has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
 #' 
+#' With a few exceptions (EPA, interior), research funding has increased over the last 40 years
+#' 
 
 
 #' # Problem 5 #
@@ -85,7 +91,15 @@ ggplot(data = dataf, aes(x = year, y = rd_budget,
 dataf = mutate(dataf, rd_per_gdp = rd_budget / gdp * 100)
 
 #' 2. Try and figure out what this code is doing. 
+#' 
+#' This code adds a variable `rd_per_gdp` to `dataf`.  This variable is R&D funding as a percentage of GDP. 
+#' 
+
 #' 3. How does this line violate the rules of functional programming? How could it be modified to avoid the violation? 
+#' 
+#' This line violates immutability.  We could avoid this by assigning the output to a new dataframe, or by adding `rd_per_gdp` when we first load the data.   
+#' 
+
 #' 4. Modify your plot above to plot R&D spending, as a percentage of GDP, over time. 
 
 ggplot(data = dataf, aes(x = year, y = rd_per_gdp,
@@ -97,6 +111,8 @@ ggplot(data = dataf, aes(x = year, y = rd_per_gdp,
          title = 'Federal R&D spending over time')
 
 #' 5. In terms of percentage of GDP, has federal R&D spending generally increased, decreased, or stayed flat over the last 40 years? 
+#' 
+#' Decreased across the board
 #' 
 
 
